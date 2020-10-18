@@ -1,4 +1,43 @@
-const options = {"workboxURL":"https://cdn.jsdelivr.net/npm/workbox-cdn@5.1.3/workbox/workbox-sw.js","importScripts":[],"config":{"debug":false},"clientsClaim":true,"skipWaiting":true,"cleanupOutdatedCaches":true,"offlineAnalytics":false,"preCaching":["/","/"],"runtimeCaching":[{"urlPattern":"/_nuxt/","handler":"CacheFirst","method":"GET","strategyPlugins":[]},{"urlPattern":"/","handler":"NetworkFirst","method":"GET","strategyPlugins":[]},{"urlPattern":"/_nuxt/","handler":"CacheFirst","method":"GET","strategyPlugins":[]},{"urlPattern":"/","handler":"NetworkFirst","method":"GET","strategyPlugins":[]}],"offlinePage":null,"pagesURLPattern":"/","offlineStrategy":"NetworkFirst"}
+const options = {
+  workboxURL:
+    'https://cdn.jsdelivr.net/npm/workbox-cdn@5.1.3/workbox/workbox-sw.js',
+  importScripts: [],
+  config: { debug: false },
+  clientsClaim: true,
+  skipWaiting: true,
+  cleanupOutdatedCaches: true,
+  offlineAnalytics: false,
+  preCaching: ['/', '/'],
+  runtimeCaching: [
+    {
+      urlPattern: '/_nuxt/',
+      handler: 'CacheFirst',
+      method: 'GET',
+      strategyPlugins: [],
+    },
+    {
+      urlPattern: '/',
+      handler: 'NetworkFirst',
+      method: 'GET',
+      strategyPlugins: [],
+    },
+    {
+      urlPattern: '/_nuxt/',
+      handler: 'CacheFirst',
+      method: 'GET',
+      strategyPlugins: [],
+    },
+    {
+      urlPattern: '/',
+      handler: 'NetworkFirst',
+      method: 'GET',
+      strategyPlugins: [],
+    },
+  ],
+  offlinePage: null,
+  pagesURLPattern: '/',
+  offlineStrategy: 'NetworkFirst',
+}
 
 importScripts(...[options.workboxURL, ...options.importScripts])
 
@@ -46,7 +85,10 @@ function initWorkbox(workbox, options) {
 
 function precacheAssets(workbox, options) {
   if (options.preCaching.length) {
-    workbox.precaching.precacheAndRoute(options.preCaching, options.cacheOptions)
+    workbox.precaching.precacheAndRoute(
+      options.preCaching,
+      options.cacheOptions
+    )
   }
 }
 
@@ -55,8 +97,9 @@ function runtimeCaching(workbox, options) {
     const urlPattern = new RegExp(entry.urlPattern)
     const method = entry.method || 'GET'
 
-    const plugins = (entry.strategyPlugins || [])
-      .map(p => new (getProp(workbox, p.use))(...p.config))
+    const plugins = (entry.strategyPlugins || []).map(
+      (p) => new (getProp(workbox, p.use))(...p.config)
+    )
 
     const strategyOptions = { ...entry.strategyOptions, plugins }
 
@@ -69,23 +112,20 @@ function runtimeCaching(workbox, options) {
 function offlinePage(workbox, options) {
   if (options.offlinePage) {
     // Register router handler for offlinePage
-    workbox.routing.registerRoute(new RegExp(options.pagesURLPattern), ({ request, event }) => {
-      const strategy = new workbox.strategies[options.offlineStrategy]
-      return strategy
-        .handle({ request, event })
-        .catch(() => caches.match(options.offlinePage))
-    })
+    workbox.routing.registerRoute(
+      new RegExp(options.pagesURLPattern),
+      ({ request, event }) => {
+        const strategy = new workbox.strategies[options.offlineStrategy]()
+        return strategy
+          .handle({ request, event })
+          .catch(() => caches.match(options.offlinePage))
+      }
+    )
   }
 }
 
-function workboxExtensions(workbox, options) {
-  
-}
+function workboxExtensions(workbox, options) {}
 
-function cachingExtensions(workbox, options) {
-  
-}
+function cachingExtensions(workbox, options) {}
 
-function routingExtensions(workbox, options) {
-  
-}
+function routingExtensions(workbox, options) {}
