@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const options = {
   workboxURL:
     'https://cdn.jsdelivr.net/npm/workbox-cdn@5.1.3/workbox/workbox-sw.js',
@@ -38,9 +39,15 @@ const options = {
   pagesURLPattern: '/',
   offlineStrategy: 'NetworkFirst',
 }
+=======
+importScripts(
+  'https://cdn.jsdelivr.net/npm/workbox-cdn@5.1.3/workbox/workbox-sw.js'
+)
+>>>>>>> parent of 4c199a7... Update Portfolio
 
 importScripts(...[options.workboxURL, ...options.importScripts])
 
+<<<<<<< HEAD
 initWorkbox(workbox, options)
 workboxExtensions(workbox, options)
 precacheAssets(workbox, options)
@@ -48,6 +55,12 @@ cachingExtensions(workbox, options)
 runtimeCaching(workbox, options)
 offlinePage(workbox, options)
 routingExtensions(workbox, options)
+=======
+// Set workbox config
+workbox.setConfig({
+  debug: false,
+})
+>>>>>>> parent of 4c199a7... Update Portfolio
 
 function getProp(obj, prop) {
   return prop.split('.').reduce((p, c) => p[c], obj)
@@ -77,6 +90,7 @@ function initWorkbox(workbox, options) {
     workbox.precaching.cleanupOutdatedCaches()
   }
 
+<<<<<<< HEAD
   if (options.offlineAnalytics) {
     // Enable offline Google Analytics tracking
     workbox.googleAnalytics.initialize()
@@ -129,3 +143,16 @@ function workboxExtensions(workbox, options) {}
 function cachingExtensions(workbox, options) {}
 
 function routingExtensions(workbox, options) {}
+=======
+// Register route handlers for runtimeCaching
+workbox.routing.registerRoute(
+  new RegExp('/PortfolioNuxtJS/_nuxt/'),
+  new workbox.strategies.CacheFirst({}),
+  'GET'
+)
+workbox.routing.registerRoute(
+  new RegExp('/PortfolioNuxtJS/'),
+  new workbox.strategies.NetworkFirst({}),
+  'GET'
+)
+>>>>>>> parent of 4c199a7... Update Portfolio
